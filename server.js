@@ -21,6 +21,10 @@ app.use((req, res, next) => {
   next();
 });
 
+
+
+
+// возвращет список всех таймеров
 app.get('/api/timers', (req, res) => {
   fs.readFile(DATA_FILE, (err, data) => {
     res.setHeader('Cache-Control', 'no-cache');
@@ -28,6 +32,7 @@ app.get('/api/timers', (req, res) => {
   });
 });
 
+// принимает JSON body с аттрибутами и вставляет новый объект-таймер в свое хранилище
 app.post('/api/timers', (req, res) => {
   fs.readFile(DATA_FILE, (err, data) => {
     const timers = JSON.parse(data);
@@ -46,6 +51,8 @@ app.post('/api/timers', (req, res) => {
   });
 });
 
+// принимает JSON body  с атрибутами id и start.
+// Ищет по хранилищу нужный таймер id и устанавливает runningSince to start
 app.post('/api/timers/start', (req, res) => {
   fs.readFile(DATA_FILE, (err, data) => {
     const timers = JSON.parse(data);
@@ -60,6 +67,9 @@ app.post('/api/timers/start', (req, res) => {
   });
 });
 
+// принимает JSON body с атрибутами id и stop.
+// Ищет по хранилищу нужный таймер id, обновляет elapsed в зависимости от того,
+// как долго таймер был запущен (stop - runningSince). Устанавливает runningSince to null
 app.post('/api/timers/stop', (req, res) => {
   fs.readFile(DATA_FILE, (err, data) => {
     const timers = JSON.parse(data);
@@ -76,6 +86,8 @@ app.post('/api/timers/stop', (req, res) => {
   });
 });
 
+// принимает JSON body с атрибутами id и title / project.
+// Ищет по хранилищу нужный таймер id, обновляет title и/или project
 app.put('/api/timers', (req, res) => {
   fs.readFile(DATA_FILE, (err, data) => {
     const timers = JSON.parse(data);
@@ -91,6 +103,8 @@ app.put('/api/timers', (req, res) => {
   });
 });
 
+// принимает JSON body с атрибутом id
+// Ищет по хранилищу нужный таймер id и удаляет его
 app.delete('/api/timers', (req, res) => {
   fs.readFile(DATA_FILE, (err, data) => {
     let timers = JSON.parse(data);
@@ -106,6 +120,10 @@ app.delete('/api/timers', (req, res) => {
     });
   });
 });
+
+
+
+
 
 app.get('/molasses', (_, res) => {
   setTimeout(() => {
